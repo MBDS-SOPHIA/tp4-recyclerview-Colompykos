@@ -1,5 +1,6 @@
 package com.openclassrooms.magicgithub.ui.user_list
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,7 +13,7 @@ class UserListAdapter(  // FOR CALLBACK ---
     private val callback: Listener
 ) : RecyclerView.Adapter<ListUserViewHolder>() {
     // FOR DATA ---
-    private var users: List<User> = ArrayList()
+    var users: List<User> = ArrayList()
 
     interface Listener {
         fun onClickDelete(user: User)
@@ -27,6 +28,9 @@ class UserListAdapter(  // FOR CALLBACK ---
 
     override fun onBindViewHolder(holder: ListUserViewHolder, position: Int) {
         holder.bind(users[position], callback)
+        holder.itemView.setBackgroundColor(
+            if (users[position].isActive) Color.WHITE else Color.RED
+        )
     }
 
     override fun getItemCount(): Int {
