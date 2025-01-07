@@ -7,6 +7,7 @@ import com.openclassrooms.magicgithub.di.Injection.getRepository
 import com.openclassrooms.magicgithub.model.User
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Collections
 
 class ListUserActivity : AppCompatActivity(), UserListAdapter.Listener {
     private lateinit var binding: ActivityListUserBinding
@@ -29,13 +30,17 @@ class ListUserActivity : AppCompatActivity(), UserListAdapter.Listener {
         adapter = UserListAdapter(this)
         binding.activityListUserRv.adapter = adapter
 
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                return false
+                val fromPosition = viewHolder.adapterPosition
+                val toPosition = target.adapterPosition
+                Collections.swap(adapter.users, fromPosition, toPosition)
+                adapter.notifyItemMoved(fromPosition, toPosition)
+                return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
